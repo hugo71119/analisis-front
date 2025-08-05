@@ -84,14 +84,16 @@ export default function Checkout() {
                 }
             );
 
-            await Swal.fire({
+            Swal.fire({
                 icon: "success",
                 title: "Reservación completada",
                 text: "✅ Tu reservación se realizó con éxito.",
-                confirmButtonText: "Ver mis reservaciones",
+                timer: 3000,
+                showConfirmButton: false,
+            }).then(() => {
+                navigate("/reservaciones");
             });
 
-            navigate("/reservaciones");
         } catch (error) {
             console.error("Error al reservar:", error);
             Swal.fire({
