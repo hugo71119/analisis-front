@@ -17,6 +17,7 @@ import VerCuarto from './components/VerCuarto.jsx'
 import EditarReservacion from './components/EditarReservacion.jsx'
 import DetalleCuarto from './components/DetalleCuarto.jsx'
 import Checkout from './components/Checkout.jsx'
+import AnalystDashboard from './components/AnalystDashboard.jsx'
 
 
 const router = createBrowserRouter([
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: '/checkout',
         element: <Checkout />
+      },
+      {
+        path: '/analyst/dashboard',
+        element: <AnalystDashboard />
       },
       {
         path: '*',

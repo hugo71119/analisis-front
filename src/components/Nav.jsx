@@ -53,6 +53,14 @@ export default function Nav() {
             >
               Cuartos
             </Link>
+          ) : rol === 'ANALYST' ? (
+            <Link
+              to="/analyst/dashboard"
+              onClick={handleLinkClick}
+              className="min-w-[120px] text-sm opacity-70 hover:opacity-100 transition-opacity py-2 text-center"
+            >
+              Dashboard
+            </Link>
           ) : (
             <Link
               to="/reservaciones"

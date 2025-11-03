@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
+import jsPDF from "jspdf";
 
 export default function Checkout() {
     const location = useLocation();
@@ -64,9 +65,63 @@ export default function Checkout() {
         }
     };
 
-    //useEffect(() => {
-    //window.location.reload()
-    //}, []);
+
+    const generarComprobante = () => {
+        const doc = new jsPDF();
+
+        // Opcional: logotipo en base64 (puedes poner el tuyo aquí)
+        const logoBase64 = ''; // ← Agrega aquí tu imagen como base64 si quieres
+
+        if (logoBase64) {
+            doc.addImage(logoBase64, "PNG", 150, 10, 40, 20);
+        }
+
+        doc.setFontSize(18);
+        doc.setTextColor(40, 40, 40);
+        doc.text("Comprobante de Reservación", 20, 30);
+
+        // Línea divisoria
+        doc.setLineWidth(0.5);
+        doc.line(20, 35, 190, 35);
+
+        doc.setFontSize(12);
+        doc.setTextColor(60, 60, 60);
+
+        // Información de la reservación
+        const data = [
+            { label: "ID del cuarto", value: cuarto.id },
+            { label: "Número de cuarto", value: cuarto.numero },
+            { label: "Tipo", value: cuarto.tipo },
+            { label: "Capacidad", value: `${cuarto.capacidad} persona${cuarto.capacidad > 1 ? "s" : ""}` },
+            { label: "Precio por noche", value: `$${cuarto.precio}` },
+            { label: "Fecha de inicio", value: fechaInicio },
+            { label: "Fecha de fin", value: fechaFin },
+            { label: "Días reservados", value: dias },
+            { label: "Total pagado", value: `$${total}`, bold: true },
+            { label: "Método de pago", value: "PayPal" },
+            { label: "Fecha de emisión", value: new Date().toLocaleString() },
+        ];
+
+        let y = 45;
+
+        data.forEach(({ label, value, bold }) => {
+            doc.setFont(undefined, bold ? "bold" : "normal");
+            doc.text(`${label}:`, 20, y);
+            doc.setFont(undefined, "normal");
+            doc.text(String(value), 80, y);
+            y += 10;
+        });
+
+        // Footer
+        doc.setDrawColor(200, 200, 200);
+        doc.line(20, y + 10, 190, y + 10);
+        doc.setFontSize(10);
+        doc.setTextColor(150, 150, 150);
+        doc.text("Gracias por reservar con nosotros", 20, y + 20);
+
+        doc.save("comprobante_reservacion.pdf");
+    };
+
 
     const handleReservar = async (cuartoId) => {
         try {
@@ -132,7 +187,13 @@ export default function Checkout() {
                     const order = await actions.order.capture();
                     console.log("✅ Pago aprobado:", order);
 
-                    await handleReservar(cuarto.id); // 👈 Aquí lo usas
+                    await handleReservar(cuarto.id);
+
+                    generarComprobante();
+
+                    setTimeout(() => {
+                        navigate("/reservaciones"); // 👉 Redirige después de 2 segundos
+                    }, 2000);
 
                 } catch (error) {
                     console.error("❌ Error al confirmar reservación:", error);

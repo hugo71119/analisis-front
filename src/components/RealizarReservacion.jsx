@@ -9,39 +9,7 @@ export default function RealizarReservacion() {
     const token = localStorage.getItem("token");
     const API = import.meta.env.VITE_API_URL;
 
-    const handleReservar = async (cuartoId) => {
-        try {
-            const res = await axios.post(
-                `${API}/reservaciones`,
-                {
-                    cuartoId,
-                    fechaInicio: state.fechaInicio,
-                    fechaFin: state.fechaFin,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
 
-            await Swal.fire({
-                icon: "success",
-                title: "Reservación completada",
-                text: "✅ Tu reservación se realizó con éxito.",
-                confirmButtonText: "Ver mis reservaciones",
-            });
-
-            navigate("/reservaciones");
-        } catch (error) {
-            console.error("Error al reservar:", error);
-            Swal.fire({
-                icon: "error",
-                title: "Error al reservar",
-                text: "❌ No se pudo completar la reservación.",
-            });
-        }
-    };
 
     const handlePagar = async (cuarto) => {
         const fechaInicio = new Date(state.fechaInicio);
@@ -102,13 +70,6 @@ export default function RealizarReservacion() {
                                 <td className="py-3 px-4">{state.fechaInicio}</td>
                                 <td className="py-3 px-4">{state.fechaFin}</td>
                                 <td className="py-3 px-4">
-                                    <button
-                                        onClick={() => handleReservar(cuarto.id)}
-                                        className="bg-[#c20064] hover:bg-[#a80056] text-white px-4 py-2 rounded-lg transition-colors hover:cursor-pointer"
-                                    >
-                                        Reservar
-                                    </button>
-
                                     <button onClick={() => {
                                         navigate(`/detalle-cuarto/${cuarto.id}`);
                                     }} className="bg-[#c20064] hover:bg-[#a80056] text-white px-4 py-2 rounded-lg transition-colors hover:cursor-pointer">
@@ -143,20 +104,19 @@ export default function RealizarReservacion() {
                         <p><span className="font-semibold text-pink-400">Precio:</span> ${cuarto.precio}</p>
                         <p><span className="font-semibold text-pink-400">Inicio:</span> {state.fechaInicio}</p>
                         <p><span className="font-semibold text-pink-400">Fin:</span> {state.fechaFin}</p>
-                        <button
-                            onClick={() => handleReservar(cuarto.id)}
-                            className="mt-4 w-full bg-[#c20064] hover:bg-[#a80056] text-white py-2 rounded-lg transition-colors"
-                        >
-                            Reservar
-                        </button>
+
                         <button onClick={() => {
                             navigate(`/detalle-cuarto/${cuarto.id}`);
                         }} className="mt-4 w-full bg-[#c20064] hover:bg-[#a80056] text-white py-2 rounded-lg transition-colors">
                             Ver Cuarto
                         </button>
                         <button onClick={() => {
-                            navigate(`/checkout`, { state: { cuarto, fechaInicio: state.fechaInicio, fechaFin: state.fechaFin } }
-                            );
+                            sessionStorage.setItem("checkoutData", JSON.stringify({
+                                cuarto,
+                                fechaInicio: state.fechaInicio,
+                                fechaFin: state.fechaFin
+                            }));
+                            navigate("/checkout");
                         }} className="mt-4 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
                             Checkout
                         </button>
