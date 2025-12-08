@@ -55,11 +55,11 @@ export default function Nav() {
             </Link>
           ) : rol === 'ANALYST' ? (
             <Link
-              to="/analyst/dashboard"
+              to="/analyst/tabla"
               onClick={handleLinkClick}
               className="min-w-[120px] text-sm opacity-70 hover:opacity-100 transition-opacity py-2 text-center"
             >
-              Dashboard
+              Tabla
             </Link>
           ) : (
             <Link
@@ -82,6 +82,14 @@ export default function Nav() {
             className="min-w-[120px] text-sm opacity-70 hover:opacity-100 transition-opacity py-2 text-center"
           >
             Admin
+          </Link>
+        ) : rol === 'ANALYST' ? (
+          <Link
+            to="/analyst/dashboard"
+            onClick={handleLinkClick}
+            className="min-w-[120px] text-sm opacity-70 hover:opacity-100 transition-opacity py-2 text-center"
+          >
+            Dashboard
           </Link>
         ) : (
           <Link

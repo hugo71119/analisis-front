@@ -18,6 +18,7 @@ import EditarReservacion from './components/EditarReservacion.jsx'
 import DetalleCuarto from './components/DetalleCuarto.jsx'
 import Checkout from './components/Checkout.jsx'
 import AnalystDashboard from './components/AnalystDashboard.jsx'
+import AnalystDashboardCharts from './components/AnalystDashboardCharts.jsx'
 
 
 const router = createBrowserRouter([
@@ -75,8 +76,12 @@ const router = createBrowserRouter([
         element: <Checkout />
       },
       {
-        path: '/analyst/dashboard',
+        path: '/analyst/tabla',
         element: <AnalystDashboard />
+      },
+      {
+        path: '/analyst/dashboard',
+        element: <AnalystDashboardCharts />
       },
       {
         path: '*',
